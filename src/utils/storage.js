@@ -6,7 +6,7 @@ export function loadPeople() {
         const parsed = raw ? JSON.parse(raw) : [];
         return Array.isArray(parsed) ? parsed : [];
     } catch {
-        return []; // повреждённый JSON не уронит приложение
+        return [];
     }
 }
 
@@ -15,6 +15,6 @@ export function savePeople(people) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(people));
         return true;
     } catch {
-        return false; // QuotaExceededError — место кончилось
+        return false;
     }
 }

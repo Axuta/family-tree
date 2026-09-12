@@ -1,6 +1,7 @@
-import { useState } from "react";
+import {useState} from "react";
+import {resizeImage} from "../utils/image";
 
-function PersonForm({ onSave }) {
+function PersonForm({onSave}) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [birthYear, setBirthYear] = useState("");
@@ -9,6 +10,22 @@ function PersonForm({ onSave }) {
     const [bio, setBio] = useState("");
     const [notes, setNotes] = useState("");
     const [error, setError] = useState("");
+    const [photo, setPhoto] = useState(null);
+    const [photoStatus, setPhotoStatus] = useState("");
+
+    const handlePhotoChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setPhotoStatus("loading");
+        try {
+            const resized = await resizeImage(file);
+            setPhoto(resized);
+            setPhotoStatus("");
+        } catch {
+            setPhotoStatus("error");
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,13 +52,12 @@ function PersonForm({ onSave }) {
             gender,
             bio: bio.trim(),
             notes: notes.trim(),
-            photo: null,
+            photo: photo,
             fatherId: null,
             motherId: null,
             spouseIds: [],
         });
 
-        // очистка формы
         setFirstName("");
         setLastName("");
         setBirthYear("");
@@ -89,6 +105,22 @@ function PersonForm({ onSave }) {
                 <option value="m">Male</option>
                 <option value="f">Female</option>
             </select>
+
+            <label className="photo-label">
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="photo-input"
+                />
+                {photo ? (
+                    <img src={photo} alt="Preview" className="photo-preview"/>
+                ) : (
+                    <span className="photo-placeholder">+ Photo</span>
+                )}
+            </label>
+            {photoStatus === "loading" && <p className="status">Processing photo…</p>}
+            {photoStatus === "error" && <p className="error">Could not load image</p>}
 
             <textarea
                 placeholder="Biography"

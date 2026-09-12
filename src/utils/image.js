@@ -1,0 +1,18 @@
+export function resizeImage(file, maxSide = 200) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+
+        img.onload = () => {
+            const scale = Math.min(maxSide / img.width, maxSide / img.height, 1);
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(img.src);
+            resolve(canvas.toDataURL("image/jpeg", 0.8));
+        };
+
+        img.onerror = () => reject(new Error("Not an image file"));
+        img.src = URL.createObjectURL(file);
+    });
+}

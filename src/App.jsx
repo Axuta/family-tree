@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PersonForm from "./components/PersonForm";
+import PersonCard from "./components/PersonCard";
 import { loadPeople, savePeople } from "./utils/storage";
 
 function App() {
@@ -18,7 +19,15 @@ function App() {
         <div className="app">
             <h1 className="app-title">Family Tree</h1>
             <PersonForm onSave={addPerson} />
-            <p>Added so far: {people.length}</p>
+            {people.length === 0 ? (
+                <p className="status">No people yet</p>
+            ) : (
+                <div className="people-list">
+                    {people.map((person) => (
+                        <PersonCard key={person.id} person={person} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
