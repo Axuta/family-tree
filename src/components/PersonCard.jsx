@@ -1,8 +1,8 @@
-function PersonCard({ person }) {
+function PersonCard({ person, onSelect }) {
     const initials = `${person.firstName[0] ?? ""}${person.lastName[0] ?? ""}`.toUpperCase();
 
     return (
-        <div className="person-card">
+        <div className="person-card clickable" onClick={() => onSelect(person)}>
             {person.photo ? (
                 <img src={person.photo} alt={person.firstName} className="person-photo" />
             ) : (

@@ -1,7 +1,7 @@
-import {useState} from "react";
-import {resizeImage} from "../utils/image";
+import { useState, useEffect } from "react";
+import { resizeImage } from "../utils/image";
 
-function PersonForm({onSave}) {
+function PersonForm({ onSave, editingPerson, onUpdate, onCancelEdit }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [birthYear, setBirthYear] = useState("");
@@ -12,6 +12,28 @@ function PersonForm({onSave}) {
     const [error, setError] = useState("");
     const [photo, setPhoto] = useState(null);
     const [photoStatus, setPhotoStatus] = useState("");
+
+    useEffect(() => {
+        if (editingPerson) {
+            setFirstName(editingPerson.firstName);
+            setLastName(editingPerson.lastName);
+            setBirthYear(editingPerson.birthYear ?? "");
+            setDeathYear(editingPerson.deathYear ?? "");
+            setGender(editingPerson.gender);
+            setBio(editingPerson.bio);
+            setNotes(editingPerson.notes);
+            setPhoto(editingPerson.photo);
+        } else {
+            setFirstName("");
+            setLastName("");
+            setBirthYear("");
+            setDeathYear("");
+            setBio("");
+            setNotes("");
+            setPhoto(null);
+            setError("");
+        }
+    }, [editingPerson]);
 
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
@@ -43,33 +65,40 @@ function PersonForm({onSave}) {
             return;
         }
 
-        onSave({
-            id: crypto.randomUUID(),
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            birthYear: parsedBirth,
-            deathYear: parsedDeath,
-            gender,
-            bio: bio.trim(),
-            notes: notes.trim(),
-            photo: photo,
-            fatherId: null,
-            motherId: null,
-            spouseIds: [],
-        });
-
-        setFirstName("");
-        setLastName("");
-        setBirthYear("");
-        setDeathYear("");
-        setBio("");
-        setNotes("");
+        if (editingPerson) {
+            onUpdate({
+                ...editingPerson,
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                birthYear: parsedBirth,
+                deathYear: parsedDeath,
+                gender,
+                bio: bio.trim(),
+                notes: notes.trim(),
+                photo,
+            });
+        } else {
+            onSave({
+                id: crypto.randomUUID(),
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                birthYear: parsedBirth,
+                deathYear: parsedDeath,
+                gender,
+                bio: bio.trim(),
+                notes: notes.trim(),
+                photo,
+                fatherId: null,
+                motherId: null,
+                spouseIds: [],
+            });
+        }
         setError("");
     };
 
     return (
         <form onSubmit={handleSubmit} className="person-form">
-            <h2>Add Person</h2>
+            <h2>{editingPerson ? "Edit Person" : "Add Person"}</h2>
 
             <div className="form-row">
                 <input
@@ -114,7 +143,7 @@ function PersonForm({onSave}) {
                     className="photo-input"
                 />
                 {photo ? (
-                    <img src={photo} alt="Preview" className="photo-preview"/>
+                    <img src={photo} alt="Preview" className="photo-preview" />
                 ) : (
                     <span className="photo-placeholder">+ Photo</span>
                 )}
@@ -138,7 +167,12 @@ function PersonForm({onSave}) {
 
             {error && <p className="error">{error}</p>}
 
-            <button type="submit">Add</button>
+            <button type="submit">{editingPerson ? "Save" : "Add"}</button>
+            {editingPerson && (
+                <button type="button" onClick={onCancelEdit}>
+                    Cancel
+                </button>
+            )}
         </form>
     );
 }

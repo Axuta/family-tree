@@ -96,3 +96,48 @@
 .status {
   color: #666;
 }
+
+.clickable {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.clickable:hover {
+  transform: translateY(-2px);
+}
+
+.person-detail {
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.detail-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.detail-years {
+  color: #666;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.person-detail section h3 {
+  margin-bottom: 4px;
+}
