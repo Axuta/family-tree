@@ -13,6 +13,18 @@ function PersonForm({ onSave, editingPerson, onUpdate, onCancelEdit }) {
     const [error, setError] = useState("");
     const [photoStatus, setPhotoStatus] = useState("");
 
+    const resetForm = () => {
+        setFirstName("");
+        setLastName("");
+        setBirthYear("");
+        setDeathYear("");
+        setBio("");
+        setNotes("");
+        setPhoto(null);
+        setPhotoStatus("");
+        setError("");
+    };
+
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -71,7 +83,8 @@ function PersonForm({ onSave, editingPerson, onUpdate, onCancelEdit }) {
                 spouseIds: [],
             });
         }
-        setError("");
+
+        resetForm();
     };
 
     return (
