@@ -36,6 +36,7 @@ function App() {
         <div className="app">
             <h1 className="app-title">Family Tree</h1>
             <PersonForm
+                key={editingPerson?.id ?? "new"}
                 onSave={addPerson}
                 editingPerson={editingPerson}
                 onUpdate={updatePerson}

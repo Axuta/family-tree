@@ -1,39 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { resizeImage } from "../utils/image";
 
 function PersonForm({ onSave, editingPerson, onUpdate, onCancelEdit }) {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [birthYear, setBirthYear] = useState("");
-    const [deathYear, setDeathYear] = useState("");
-    const [gender, setGender] = useState("m");
-    const [bio, setBio] = useState("");
-    const [notes, setNotes] = useState("");
+    const [firstName, setFirstName] = useState(editingPerson?.firstName ?? "");
+    const [lastName, setLastName] = useState(editingPerson?.lastName ?? "");
+    const [birthYear, setBirthYear] = useState(editingPerson?.birthYear ?? "");
+    const [deathYear, setDeathYear] = useState(editingPerson?.deathYear ?? "");
+    const [gender, setGender] = useState(editingPerson?.gender ?? "m");
+    const [bio, setBio] = useState(editingPerson?.bio ?? "");
+    const [notes, setNotes] = useState(editingPerson?.notes ?? "");
+    const [photo, setPhoto] = useState(editingPerson?.photo ?? null);
     const [error, setError] = useState("");
-    const [photo, setPhoto] = useState(null);
     const [photoStatus, setPhotoStatus] = useState("");
-
-    useEffect(() => {
-        if (editingPerson) {
-            setFirstName(editingPerson.firstName);
-            setLastName(editingPerson.lastName);
-            setBirthYear(editingPerson.birthYear ?? "");
-            setDeathYear(editingPerson.deathYear ?? "");
-            setGender(editingPerson.gender);
-            setBio(editingPerson.bio);
-            setNotes(editingPerson.notes);
-            setPhoto(editingPerson.photo);
-        } else {
-            setFirstName("");
-            setLastName("");
-            setBirthYear("");
-            setDeathYear("");
-            setBio("");
-            setNotes("");
-            setPhoto(null);
-            setError("");
-        }
-    }, [editingPerson]);
 
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
